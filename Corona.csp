@@ -7,18 +7,17 @@ POLL_KEYBD:	INB KEYBOARD_STATUS
 	JGE POLL_KEYBD
 	INB KEYBOARD_DATA
 	STA+ $D00
-	CMA# $064
+	CMA# 'd'
 	JEQ DELETE
 	ADX# $001
 	JMP POLL_KEYBD
 DELETE:	TXA
 	STA $031 ; 031 holds the old xr
-	SBA# $009
+	ADA# $CF7
 	STA $032 ; 032 is gonna store where the characters are; access through indirect adresing
-	LDX# $000
+	LDX# $FFF
 LOOP:	INC $032
-	LDA $032
-	AOC# CHR_LEN
+	AOC CHR_LEN
 	JGE END
 	LDC CHR
 	CMA* $032
@@ -26,11 +25,12 @@ LOOP:	INC $032
 	INC $031
 	LDX $031
 	JMP POLL_KEYBD
-END:	LDA# $F7F
-END_LOOP:	LDX# $000
-	MUL# $F8E
-	STA+ $001
-	CMX# $01C 
+END:	LDA $032
+	LDX# $000
+END_LOOP:	MUL# $031
+	STA+ $000
+	ADX# $001
+	CMX# $01B
 	JLE END_LOOP
 	HLT
 CHR:	.CHAR 'get pwned'
