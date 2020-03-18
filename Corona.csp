@@ -30,7 +30,7 @@ END:	LDA $032
 END_LOOP:	MUL# $031
 	STA+ $000
 	ADX# $001
-	CMX# $01B
+	CMX# $01A
 	JLE END_LOOP
 	HLT
 CHR:	.CHAR 'get pwned'
